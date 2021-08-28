@@ -13,6 +13,14 @@ impl DeltaTime {
     }
 }
 
+impl std::ops::Deref for DeltaTime {
+    type Target = Duration;
+
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
+
 pub enum Transition {
     Switch(Box<dyn State>),
     Push(Box<dyn State>),
