@@ -3,6 +3,8 @@
 use bracket_lib::prelude::*;
 use std::time::Duration;
 
+pub mod stopwatch;
+
 #[derive(Copy, Clone)]
 pub struct DeltaTime(Duration);
 
@@ -86,6 +88,7 @@ impl StateMachine {
 
     // TODO write these individual operations
 
+    /// it is not desirable to add/remove states in the middle of a frame
     fn apply_pending_trans(&mut self) {
         let pending_ops = self.pending_ops.drain(..);
         for pending_op in pending_ops {
@@ -112,6 +115,7 @@ impl GameState for StateMachine {
     fn tick(&mut self, ctx: &mut BTerm) {
         if (self.is_empty()) {
             ctx.quit();
+            return;
         }
 
         if let Some(key) = ctx.key {
@@ -124,7 +128,7 @@ impl GameState for StateMachine {
         ctx.cls();
         self.draw(ctx);
 
-        // TODO perform pending operations
+        self.apply_pending_trans();
     }
 }
 
