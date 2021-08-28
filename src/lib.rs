@@ -1,12 +1,17 @@
 #![allow(unused)]
 
 use bracket_lib::prelude::*;
+use std::time::Duration;
 
 #[derive(Copy, Clone)]
-pub struct Ms(f32);
+pub struct DeltaTime(Duration);
 
-#[derive(Copy, Clone)]
-pub struct DeltaTime(Ms);
+impl DeltaTime {
+    pub fn from_millis(millis: f32) -> Self {
+        // TODO
+        DeltaTime(Duration::from_millis(millis as u64))
+    }
+}
 
 pub enum Transition {
     Switch(Box<dyn State>),
@@ -106,7 +111,7 @@ impl GameState for StateMachine {
         }
 
         // TODO time
-        self.update(DeltaTime(Ms(33.0)));
+        self.update(DeltaTime::from_millis(ctx.frame_time_ms));
 
         ctx.cls();
         self.draw(ctx);
