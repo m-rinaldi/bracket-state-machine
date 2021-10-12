@@ -27,19 +27,22 @@ pub enum Transition {
     Switch(Box<dyn State>),
     Push(Box<dyn State>),
     Pop,
-    Reset,
+    Clear,
     // TODO Sequence(Vec<Transition>)
 }
 
 
 pub trait State {
-    #[must_use]
+    #[must_use="it may trigger a state change"]
     fn handle_input(&mut self, input: VirtualKeyCode) -> Option<Transition>;
 
-    #[must_use]
+    #[must_use="it may trigger a state change"]
     fn update(&mut self, dt: DeltaTime) -> Option<Transition>;
 
     fn draw(&self, term: &mut BTerm);
+    fn is_transparent(&self) -> bool {
+        true
+    }
 }
 
 pub struct StateMachine {
@@ -103,7 +106,7 @@ impl StateMachine {
                 Transition::Pop => {
                     self.states.pop();
                 }
-                Transition::Reset => {
+                Transition::Clear => {
                     self.states.clear();
                 }
             };
