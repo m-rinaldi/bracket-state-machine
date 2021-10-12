@@ -34,12 +34,16 @@ pub enum Transition {
 
 pub trait State {
     #[must_use="it may trigger a state change"]
-    fn handle_input(&mut self, input: VirtualKeyCode) -> Option<Transition>;
+    fn handle_input(&mut self, input: VirtualKeyCode) -> Option<Transition> {
+        None
+    }
 
     #[must_use="it may trigger a state change"]
-    fn update(&mut self, dt: DeltaTime) -> Option<Transition>;
+    fn update(&mut self, dt: DeltaTime) -> Option<Transition> {
+        None
+    }
 
-    fn draw(&self, term: &mut BTerm);
+    fn draw(&self, term: &mut BTerm) {}
     fn is_transparent(&self) -> bool {
         true
     }
